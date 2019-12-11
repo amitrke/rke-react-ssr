@@ -1,0 +1,29 @@
+service: rke-react-ssr1
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: us-east-1
+  stage: dev
+
+functions:
+  server:
+    handler: index.server
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
+
+plugins:
+  - serverless-apigw-binary
+  - serverless-domain-manager
+  - serverless-offline
+
+custom:
+  apigwBinary:
+    types:
+      - '*/*'
+  customDomain:
+    domainName: www2.aws.roorkee.org
+    basePath: ''
+    stage: dev
+    createRoute53Record: true
